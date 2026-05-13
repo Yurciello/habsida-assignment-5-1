@@ -111,15 +111,16 @@ h3{
     .swiper {
         height: auto;
         align-items: flex-start;
-        flex-direction: column;justify-content: flex-start;
-        /* padding: 0 1.5rem; */
+        flex-direction: column;
+        justify-content: flex-start;
+        padding-left: 3.125%;
         margin: 0;
     }
     
     .swiper-wrapper {
         display: flex;
         flex-wrap: wrap;
-        justify-content: center;
+        justify-content: flex-start;
         gap: 1.5rem;
         align-items: space-between;
         height: fit-content;
@@ -193,3 +194,4 @@ h3{
         
     }
 }
+
