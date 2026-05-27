@@ -1,84 +1,76 @@
 
-function initTabletWindow () {
-if (
-  window.innerWidth >= 768 &&
-  window.innerWidth <= 1119
-) {
-  const button = document.getElementById("moreButtonTablet");
+// Функции для кнопки заданы по образу и подобию свайпера (см. ниже).
+let tabletWindow = null;
 
-  button.addEventListener("click", () => {
-    const moreButtonTabletLabel = document.getElementById("moreButtonTabletLabel");
-    const elements = document.querySelectorAll(".hidden-on-tablets");
-    const img = document.getElementById("moreButtonTabletIcon");
+function initTabletWindow() {
+  if (window.innerWidth >= 768 && window.innerWidth <= 1119 && !tabletWindow) {
+    const button = document.getElementById("moreButton");
+    button.addEventListener("click", () => {
+      const moreButtonLabel = document.getElementById(
+        "moreButtonLabel",
+      );
+      const elements1 = document.querySelectorAll(".hidden-on-tablets");
+      const img = document.getElementById("moreButtonIcon");
 
-    console.log(moreButtonTabletLabel);
+      console.log(moreButtonLabel);
 
-    if (moreButtonTabletLabel.textContent == "Показать ещё") {
-      moreButtonTabletLabel.textContent = "Скрыть";
-      img.src = "icons/less-button.svg";
+      if (moreButtonLabel.textContent == "Показать ещё") {
+        moreButtonLabel.textContent = "Скрыть";
+        img.src = "icons/less-button.svg";
 
-      elements.forEach((element) => {
-        element.style.setProperty("display", "flex", "important");
-      });
-    } else {
-      moreButtonTabletLabel.textContent = "Показать ещё";
-      img.src = "icons/more-button.svg";
+        elements1.forEach((element) => {
+          element.style.setProperty("display", "flex", "important");
+        });
+        } else {
+        moreButtonLabel.textContent = "Показать ещё";
+        img.src = "icons/more-button.svg";
 
-      elements.forEach((element) => {
-        element.style.setProperty("display", "none", "important");
-      });
-    }
-  });
-}
-}
+        elements1.forEach((element) => {
+          element.style.setProperty("display", "none", "important");
+        });
+      }
+    });
 
-
-if (
-  window.innerWidth >= 768 && window.innerWidth <=1119
-) {
-  initTabletWindow ();
+  } else if (window.innerWidth < 768 && window.innerWidth > 1119 && tabletWindow) {
+    tabletWindow.destroy(true, true);
+    tabletWindow = null;
+  }
 }
 
-window.addEventListener("resize", initTabletWindow);
 
+let PCWindow = null;
 
+function initPCWindow() {
+  if (window.innerWidth >= 1120 && !PCWindow) {
+    const button = document.getElementById("moreButton");
+    button.addEventListener("click", () => {
+      const moreButtonLabel = document.getElementById("moreButtonLabel");
+      const elements2 = document.querySelectorAll(".hidden-on-pc");
+      const img = document.getElementById("moreButtonIcon");
 
-function initPCWindow () {
+      console.log(moreButtonLabel);
 
-if (window.innerWidth >= 1120) {
-  const button = document.getElementById("moreButtonPC");
+      if (moreButtonLabel.textContent == "Показать ещё") {
+        moreButtonLabel.textContent = "Скрыть";
+        img.src = "icons/less-button.svg";
 
-  button.addEventListener("click", () => {
-    const moreButtonPCLabel = document.getElementById("moreButtonPCLabel");
-    const elements = document.querySelectorAll(".hidden-on-pc");
-    const img = document.getElementById("moreButtonPCIcon");
+        elements2.forEach((element) => {
+          element.style.setProperty("display", "flex", "important");
+        });
+      } else {
+        moreButtonLabel.textContent = "Показать ещё";
+        img.src = "icons/more-button.svg";
 
-    console.log(moreButtonPCLabel);
-
-    if (moreButtonPCLabel.textContent == "Показать ещё") {
-      moreButtonPCLabel.textContent = "Скрыть";
-      img.src = "icons/less-button.svg";
-
-      elements.forEach((element) => {
-        element.style.setProperty("display", "flex", "important");
-      });
-    } else {
-      moreButtonPCLabel.textContent = "Показать ещё";
-      img.src = "icons/more-button.svg";
-
-      elements.forEach((element) => {
-        element.style.setProperty("display", "none", "important");
-      });
-    }
-  });
+        elements2.forEach((element) => {
+          element.style.setProperty("display", "none", "important");
+        });
+      }
+    });
+  } else if (window.innerWidth < 1119 && PCWindow) {
+    PCWindow.destroy(true, true);
+    PCWindow = null;
+  }
 }
-}
-
-if (window.innerWidth >= 1120) {
-  initPCWindow ();
-}
-
-window.addEventListener("resize", initPCWindow);
 
 
 
@@ -93,13 +85,16 @@ function initSwiper() {
   if (window.innerWidth < 768 && !swiper) {
     // обычный скрипт для свайпера
     swiper = new Swiper(".swiper", {
-      slidesPerView: 1.265,
+      slidesPerView: "auto",
       spaceBetween: 20,
       slidesOffsetBefore: 10,
       loop: true,
+      watchSlidesProgress: true,
+      watchOverflow: false,
       pagination: {
         el: ".swiper-pagination",
       },
+      mousewheel: true
     });
 
     // условие если размер окна больше или равно 768 пикселей и свайпер уже существует/создан
@@ -113,8 +108,39 @@ function initSwiper() {
 
 // Запуск при загрузке
 if (window.innerWidth < 768 && !swiper) {
-initSwiper();
+  initSwiper();
 }
 
 // Запуск при изменении размера
-window.addEventListener("resize", initSwiper);
+window.addEventListener("resize", () => {
+  initSwiper();
+  initTabletWindow();
+  initPCWindow();
+});
+
+
+//Решил применить небольшой трюк: Страница делает перезагрухку каждый раз, когда размер окна пересекает заданные размеры окна. Кажется так оно работает немного более стабильно.
+
+  function getScreenType() {
+    const width = window.innerWidth;
+
+    if (width < 768) {
+      return 'mobile';
+    } else if (width < 1120) {
+      return 'tablet';
+    } else {
+      return 'desktop';
+    }
+  }
+
+  let currentType = getScreenType();
+
+  window.addEventListener('resize', () => {
+    const newType = getScreenType();
+
+    if (newType !== currentType) {
+      location.reload();
+    }
+
+    currentType = newType;
+  });

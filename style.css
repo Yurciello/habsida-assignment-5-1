@@ -77,9 +77,10 @@ h3{
 }
 
 /* стили для слайдов, чтоб было как на макете */
+/* Пофикси слайды: сделай так, чтоб слайды не увеличивались, а вместо этого на экран накладывался следующий слайд */
 .swiper-slide {
     display: flex;
-    max-width: 100%;
+    max-width: 240px;
     height: 72px;
     justify-content: space-between;
     align-items: center;
@@ -99,29 +100,32 @@ h3{
 
 
 
-.more-button-container-tablet,
-.more-button-container-pc {
+.more-button-container {
     display: none;
 }
 
-.slides-on-tablet,
-.slides-on-pc {
-    display: none;
-}
 
 
 @media (min-width: 768px) and (max-width: 1119px) {
     .swiper {
-        display: none;
+        display: flex;
+        height: fit-content;
     }
     
     body{
         display: flex;
-        flex-wrap: wrap;
-        align-items: flex-start;
-        padding-left: 2.5%;
+        justify-content: center;
     }
-    .slides-on-tablet {
+    
+    .main-container{
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        width: 768px;
+        padding-left: 1.5rem;
+    }
+
+    .swiper-wrapper {
         box-sizing: content-box;
         display: flex;
         flex-wrap: wrap;
@@ -144,19 +148,19 @@ h3{
     .hidden-on-tablets {
         display: none;
     }
-    .more-button-container-tablet {
+    .more-button-container {
         display: flex;
         padding-left: 0.5rem;
         align-items: center;
         margin: 1.5rem 0;
         /* margin-left: 3.125%; */
     }
-    .more-button-tablet {
+    .more-button {
         background: none;
         border: none;
         
     }
-    .more-button-tablet__label {
+    .more-button-label {
         font-family: tt-lake, Arial, Helvetica, sans-serif;
         font-weight: 600;
         font-size: 1rem;
@@ -165,17 +169,24 @@ h3{
 
 @media (min-width: 1120px) {
     .swiper {
-        display: none;
+        display: flex;
+        height: fit-content;
     }
     
     body{
         display: flex;
+        justify-content: center;
+    }
+    
+    .main-container{
+        display: flex;
         flex-wrap: wrap;
-        align-items: flex-start;
-        padding-left: 4%;
+        flex-direction: column;
+        width: 1120px;
+        padding-left: 2rem;
     }
 
-    .slides-on-pc{
+    .swiper-wrapper {
         display: flex;
         flex-wrap: wrap;
         justify-content: flex-start;
@@ -199,19 +210,19 @@ h3{
     .hidden-on-pc {
         display: none;
     }
-    .more-button-container-pc {
+    .more-button-container {
         display: flex;
         padding-left: 0.5rem;
         align-items: center;
         margin: 1.5rem 0;
         /* margin-left: 1.5%; */
     }
-    .more-button-pc {
+    .more-button {
         background: none;
         border: none;
         
     }
-    .more-button-pc__label {
+    .more-button-label {
         font-family: tt-lake, Arial, Helvetica, sans-serif;
         font-weight: 600;
         font-size: 1rem;
